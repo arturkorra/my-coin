@@ -1,28 +1,34 @@
 import Link from 'next/link';
+import jQuery from 'jquery';
 
-function Header(){
+function AuthHeader(){
+
+    function showSideBar(e) {
+        e.preventDefault()
+        jQuery('.main-sidebar').toggleClass("active");
+        jQuery('.bg-overlay').toggleClass("active");
+    }
+
     return (<header className="header-main">
     <div className="container">
         <div className="content-header d-flex align-items-center justify-content-between">
-            <div className="btn-back">
+            <div onClick={showSideBar} className="navbar-menu-toggler navbar-btn">
             <Link href={{ pathname: '/' }}>
                 <a>
-                    <svg version="1.1" width="18" height="18" fill="currentColor"
-                         xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                         viewBox="0 0 492 492" style={{enableBackground:'new 0 0 492 492'}} xmlSpace="preserve">
-                        <path d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12
-			C361.476,2.792,354.712,0,347.504,0s-13.964,2.792-19.028,7.864L109.328,227.008c-5.084,5.08-7.868,11.868-7.848,19.084
-			c-0.02,7.248,2.76,14.028,7.848,19.112l218.944,218.932c5.064,5.072,11.82,7.864,19.032,7.864c7.208,0,13.964-2.792,19.032-7.864
-			l16.124-16.12c10.492-10.492,10.492-27.572,0-38.06L198.608,246.104z"/>
+                    <svg viewBox="0 -53 384 384" width="20" height="20" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="m368 154.667969h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"/>
+                        <path d="m368 32h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"/>
+                        <path d="m368 277.332031h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"/>
                     </svg>
                 </a>
                 </Link>
             </div>
             <div className="item-options">
-                <div className="item-notification icon-effect">
+                <div className="item-notification icon-effect me-3">
                 <Link href={{ pathname: '/notifications' }}>
                     <a>
-                        <svg enableBackground="new 0 0 512 512" fill="currentColor"
+                        <svg style={{enableBackground:'new 0 0 512 512'}} fill="currentColor"
                              viewBox="0 0 512 512" width="20" height="20"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="m411 262.862v-47.862c0-69.822-46.411-129.001-110-148.33v-21.67c0-24.813-20.187-45-45-45s-45 20.187-45 45v21.67c-63.59 19.329-110 78.507-110 148.33v47.862c0 61.332-23.378 119.488-65.827 163.756-4.16 4.338-5.329 10.739-2.971 16.267s7.788 9.115 13.798 9.115h136.509c6.968 34.192 37.272 60 73.491 60 36.22 0 66.522-25.808 73.491-60h136.509c6.01 0 11.439-3.587 13.797-9.115s1.189-11.929-2.97-16.267c-42.449-44.268-65.827-102.425-65.827-163.756zm-170-217.862c0-8.271 6.729-15 15-15s15 6.729 15 15v15.728c-4.937-.476-9.94-.728-15-.728s-10.063.252-15 .728zm15 437c-19.555 0-36.228-12.541-42.42-30h84.84c-6.192 17.459-22.865 30-42.42 30zm-177.67-60c34.161-45.792 52.67-101.208 52.67-159.138v-47.862c0-68.925 56.075-125 125-125s125 56.075 125 125v47.862c0 57.93 18.509 113.346 52.671 159.138z"/>
@@ -33,10 +39,15 @@ function Header(){
                     </a>
                     </Link>
                 </div>
+                <div className="avatar-item">
+                <Link href={{ pathname: '/profile' }}>
+                    <a><img src="/users/user-1.jpg"/></a>
+                </Link>
+                </div>
             </div>
         </div>
     </div>
 </header>);
 }
 
-export default Header;
+export default AuthHeader;
