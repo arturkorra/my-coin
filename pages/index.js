@@ -5,6 +5,7 @@ import SideBar from "../components/sidebar";
 import React, { useEffect } from 'react';
 import {animateService} from "../services/animateService";
 import jQuery from 'jquery';
+import Image from 'next/image';
 import Ticker from "react-ticker";
 
 function HomePage(){
@@ -88,7 +89,7 @@ function HomePage(){
     <div className="col-3">
     <div className="service-card text-center">
     <div className="card">
-    <a href="#">
+    <a href="more">
     <svg version="1.1"  width="25" height="25" fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
     x="0px"
@@ -168,7 +169,8 @@ function HomePage(){
     <div className="crypto-card overflow-hidden">
     <div className="card-body p-0">
     <div className="mb-0 p-3">
-    <h5><span className="cryp-icon my-auto me-2"><img src="/icons/dash.png"
+    <h5><span className="cryp-icon my-auto me-2">
+        <img src="/icons/dash.png"
     alt="coin image"/></span>DOGE</h5>
     <div className="d-flex justify-content-between mt-2">
     <p className="d-flex font-weight-normal">$0.07083</p>

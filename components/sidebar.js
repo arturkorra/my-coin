@@ -1,10 +1,19 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import jQuery from 'jquery';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import jwt_decode from "jwt-decode";
+import Image from 'next/image';
+
 function SideBar(){
+  useEffect(()=>{
+    getUserNameToken();
+}, []);
+  const [username, setUsername] = useState("");
+  const router = useRouter();
+
     //===== Main Sidebar =====//
     function showSideBar(e) {
         e.preventDefault()
@@ -12,7 +21,12 @@ function SideBar(){
         jQuery('.bg-overlay').toggleClass("active");
     }
 
-    const router = useRouter();
+    function getUserNameToken(){
+      const token = window.localStorage.getItem('sessionToken');
+      const decodedToken = jwt_decode(token);
+      setUsername(decodedToken.sub);
+    }
+    
     async function handleLogOut(e) {
         e.preventDefault()
 
@@ -93,8 +107,7 @@ function SideBar(){
     </div>
     <div className="col ps-1">
     <div className="profile-details">
-    <h4 className="text-light mb-2">John Doe</h4>
-    <p className="mb-0 text-gray">ID: 83323998</p>
+    <h4 className="text-light mb-2">{username}</h4>
     </div>
     </div>
     </div>

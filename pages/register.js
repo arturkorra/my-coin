@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Footer from "../components/footer";
 import Header from "../components/header";
 import React from 'react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ReCAPTCHA from "react-google-recaptcha";

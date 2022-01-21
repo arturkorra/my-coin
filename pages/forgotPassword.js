@@ -5,6 +5,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 
 function ForgotPassword(){

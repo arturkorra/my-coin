@@ -1,54 +1,56 @@
-import { BehaviorSubject } from 'rxjs';
-import getConfig from 'next/config';
-import Router from 'next/router';
+import { toast } from 'react-toastify';
 
-import { fetchWrapper } from 'helpers';
-
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
-const userSubject = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('user')));
 
 export const userService = {
-    user: userSubject.asObservable(),
-    get userValue () { return userSubject.value },
-    login,
+    baseUrl:'http://localhost:8080/my-coin-api',
     logout,
-    register,
-    getAll,
-    getById,
-    update,
-    delete: _delete
 };
-
-export const userService = {
-    user: userSubject.asObservable(),
-    get userValue () { return userSubject.value },
-    login,
-    logout,
-    register,
-    getAll,
-    getById,
-    update,
-    delete: _delete
-};
-
-function login(username, password) {
-    return fetchWrapper.post(`${baseUrl}/authenticate`, { username, password })
-        .then(user => {
-            // publish user to subscribers and store in local storage to stay logged in between page refreshes
-            userSubject.next(user);
-            localStorage.setItem('user', JSON.stringify(user));
-
-            return user;
-        });
-}
-
-function logout() {
-    // remove user from local storage, publish null to user subscribers and redirect to login page
-    localStorage.removeItem('user');
-    userSubject.next(null);
-    Router.push('/account/login');
-}
+    async function logout(router) {
+        const token = window.localStorage.getItem('sessionToken');
+        try {
+             const request = new Request(baseUrl + '/auth/logout', {
+                method: 'POST',
+                headers: new Headers({
+                  'Authorization': 'Bearer '+token,
+                  'Content-Type': 'application/json',
+                  Accept: '*/*'
+                })
+              });
+                const response = await fetch(request);
+                if (response.status < 200 || response.status >= 300) {
+                  const data = await response.json();
+                  toast.error(data.message+'!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    theme:"dark",
+                    draggable: true,
+                    progress: undefined,
+                    });
+                  window.localStorage.removeItem('sessionToken');
+                  router.push('/login'); 
+                  throw new Error(data.message);
+                }
+                window.localStorage.removeItem('sessionToken');
+                router.push('/login');
+                return Promise.resolve();
+         } catch (error) {
+          toast.error(error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme:"dark",
+            draggable: true,
+            progress: undefined,
+            });
+            window.localStorage.removeItem('sessionToken');
+            router.push('/login');    
+        }
+    }
 
 function register(user) {
     return fetchWrapper.post(`${baseUrl}/register`, user);
@@ -64,18 +66,18 @@ function getById(id) {
 
 function update(id, params) {
     return fetchWrapper.put(`${baseUrl}/${id}`, params)
-        .then(x => {
-            // update stored user if the logged in user updated their own record
-            if (id === userSubject.value.id) {
-                // update local storage
-                const user = { ...userSubject.value, ...params };
-                localStorage.setItem('user', JSON.stringify(user));
-
-                // publish updated user to subscribers
-                userSubject.next(user);
-            }
-            return x;
-        });
+    .then(x => {
+        // update stored user if the logged in user updated their own record
+        if (id === userSubject.value.id) {
+            // update local storage
+            const user = { ...userSubject.value, ...params };
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            // publish updated user to subscribers
+            userSubject.next(user);
+        }
+        return x;
+    });
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
