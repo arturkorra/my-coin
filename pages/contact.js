@@ -217,7 +217,7 @@ value={subject}
 onChange={(e) => setSubject(e.target.value)}/>
 </div>
 <div className="form-group position-relative">
-<textarea className="form-control" 
+<textarea className="form-control" type="text"
 name="comment" id="comment" cols="30" rows="5" 
 placeholder="Message"
 value={message}
