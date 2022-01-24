@@ -17,9 +17,10 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return <>
   <Head>
-  <title>Nextcoin - Bitcoin And Crypto Currency Mobile Template</title>
+  <title>MyCoin - Bitcoin And Crypto Currency Wallet</title>
   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900&display=optional" rel="stylesheet"/>
   <link rel="icon" href="../favicon.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
   <link rel="apple-touch-icon" href="/touch/homescreen96.png"/>
   <link rel="apple-touch-icon" sizes="144x144" href="../touch/homescreen144.png"/>
   <link rel="apple-touch-icon" sizes="168x168" href="../touch/homescreen168.png"/>
