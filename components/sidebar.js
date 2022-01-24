@@ -33,7 +33,7 @@ function SideBar(){
         try {
             const token = window.localStorage.getItem('sessionToken');
 
-            const request = new Request('http://localhost:8080/my-coin-api' + '/auth/logout', {
+            const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/auth/logout', {
                 method: 'POST',
                 headers: new Headers({
                   'Authorization': 'Bearer '+token,

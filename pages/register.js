@@ -76,7 +76,7 @@ function Register(){
         });
     }else{
     try {
-        const request = new Request('http://localhost:8080/my-coin-api' + '/register', {
+        const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/register', {
             method: 'POST',
             body: JSON.stringify({ username: username, email: email, password: password }),
             headers: new Headers({

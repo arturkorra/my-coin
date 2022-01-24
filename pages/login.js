@@ -67,7 +67,7 @@ export default function LogIn(){
         });
     }else{
     try {
-        const request = new Request('http://localhost:8080/my-coin-api' + '/auth', {
+        const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/auth', {
             method: 'POST',
             body: JSON.stringify({ email: email, password: password }),
             headers: new Headers({

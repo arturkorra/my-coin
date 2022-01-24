@@ -48,7 +48,7 @@ function Profile(){
         const profileData = {};
         try {
             const token = window.localStorage.getItem('sessionToken');
-            const request = new Request('http://localhost:8080/my-coin-api' + '/profile', {
+            const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/profile', {
             method: 'GET',
             headers: new Headers({
                 'Authorization': 'Bearer '+token,
@@ -100,7 +100,7 @@ async function handleUdate(e) {
     
     try {
         const token = window.localStorage.getItem('sessionToken'); 
-        const request = new Request('http://localhost:8080/my-coin-api' + '/profile', {
+        const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/profile', {
         method: 'PUT',
         body: JSON.stringify({ email: email, username: username,
         address:address, mobile:mobile, image:image}),

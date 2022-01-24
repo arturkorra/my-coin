@@ -39,7 +39,7 @@ function ForgotPassword(){
             });
         }else{
             try {
-                const request = new Request('http://localhost:8080/my-coin-api' + '/register/resetPassword', {
+                const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/register/resetPassword', {
                 method: 'POST',
                 headers: new Headers({
                     'Email': email,
@@ -63,7 +63,7 @@ function ForgotPassword(){
                     });
                     throw new Error(data.message);
                 }
-                toast.success('New password was sent to your Email!', {
+                toast.success('New password was sent to your Email! Check Spam also!', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -118,11 +118,11 @@ Reset Password
 </h4>
 <form onSubmit={handleReset}>
 <div className="form-group">
-                        <input className="form-control" placeholder="Email"
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}/>
-                    </div>
+<input className="form-control" placeholder="Email"
+type="text"
+value={email}
+onChange={(e) => setEmail(e.target.value)}/>
+</div>
 <div className="form-group">
 <button className="btn btn-main btn-lg w-100" type="submit">Reset Password</button>
 </div>

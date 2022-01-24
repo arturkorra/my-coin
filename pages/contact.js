@@ -74,7 +74,7 @@ function Contact(){
         }else{
             try {
                 jQuery("#loader-page").delay(500).fadeIn("slow");
-                const request = new Request('http://localhost:8080/my-coin-api' + '/contact', {
+                const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/contact', {
                 method: 'POST',
                 body: JSON.stringify({ username: username, email: email, subject: subject, message: message }),
                 headers: new Headers({
@@ -175,7 +175,7 @@ xmlns="http://www.w3.org/2000/svg">
 </div>
 <div className="flex-grow-1 ms-3">
 <h5 className="mb-1 fs-16">Email</h5>
-<span className="text-gray fs-14">info@mycoin.al </span>
+<span className="text-gray fs-14">mycoincryptowallet@gmail.com </span>
 </div>
 </div>
 <div className="d-flex align-items-center mb-3">

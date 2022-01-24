@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 
 export const userService = {
-    baseUrl:'http://localhost:8080/my-coin-api',
+    baseUrl:'https://my-coin-api.herokuapp.com/my-coin-api',
     logout,
 };
     async function logout(router) {
