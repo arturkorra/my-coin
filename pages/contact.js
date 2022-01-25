@@ -5,9 +5,11 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import jQuery from 'jquery';
+import getConfig from 'next/config';
 
 function Contact(){
-    
+    const {publicRuntimeConfig} = getConfig();
+    const baseApiUrl = publicRuntimeConfig.baseApiUrl;
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [subject, setSubject] = useState("");
@@ -74,7 +76,7 @@ function Contact(){
         }else{
             try {
                 jQuery("#loader-page").delay(500).fadeIn("slow");
-                const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/contact', {
+                const request = new Request(baseApiUrl + '/contact', {
                 method: 'POST',
                 body: JSON.stringify({ username: username, email: email, subject: subject, message: message }),
                 headers: new Headers({

@@ -6,9 +6,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
-
+import getConfig from 'next/config';
 
 function ForgotPassword(){
+    const {publicRuntimeConfig} = getConfig();
+    const baseApiUrl = publicRuntimeConfig.baseApiUrl;
     const router = useRouter();
     const [email, setEmail] = useState("");
     const validEmail = String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
@@ -39,7 +41,7 @@ function ForgotPassword(){
             });
         }else{
             try {
-                const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/register/resetPassword', {
+                const request = new Request(baseApiUrl + '/register/resetPassword', {
                 method: 'POST',
                 headers: new Headers({
                     'Email': email,

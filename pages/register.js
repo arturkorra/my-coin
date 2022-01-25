@@ -7,8 +7,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify';
+import getConfig from 'next/config';
 
 function Register(){
+  const {publicRuntimeConfig} = getConfig();
+  const baseApiUrl = publicRuntimeConfig.baseApiUrl;
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -76,7 +79,7 @@ function Register(){
         });
     }else{
     try {
-        const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/register', {
+        const request = new Request(baseApiUrl + '/register', {
             method: 'POST',
             body: JSON.stringify({ username: username, email: email, password: password }),
             headers: new Headers({

@@ -7,8 +7,11 @@ import React, { useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import getConfig from 'next/config';
 
 function Profile(){
+    const {publicRuntimeConfig} = getConfig();
+    const baseApiUrl = publicRuntimeConfig.baseApiUrl;
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
@@ -48,7 +51,7 @@ function Profile(){
         const profileData = {};
         try {
             const token = window.localStorage.getItem('sessionToken');
-            const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/profile', {
+            const request = new Request(baseApiUrl + '/profile', {
             method: 'GET',
             headers: new Headers({
                 'Authorization': 'Bearer '+token,
@@ -100,7 +103,7 @@ async function handleUdate(e) {
     
     try {
         const token = window.localStorage.getItem('sessionToken'); 
-        const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/profile', {
+        const request = new Request(baseApiUrl + '/profile', {
         method: 'PUT',
         body: JSON.stringify({ email: email, username: username,
         address:address, mobile:mobile, image:image}),

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import jwt_decode from "jwt-decode";
 import Image from 'next/image';
+import getConfig from 'next/config';
 
 function SideBar(){
   useEffect(()=>{
@@ -13,6 +14,8 @@ function SideBar(){
 }, []);
   const [username, setUsername] = useState("");
   const router = useRouter();
+  const {publicRuntimeConfig} = getConfig();
+  const baseApiUrl = publicRuntimeConfig.baseApiUrl;
 
     //===== Main Sidebar =====//
     function showSideBar(e) {
@@ -33,7 +36,7 @@ function SideBar(){
         try {
             const token = window.localStorage.getItem('sessionToken');
 
-            const request = new Request('https://my-coin-api.herokuapp.com/my-coin-api' + '/auth/logout', {
+            const request = new Request(baseApiUrl + '/auth/logout', {
                 method: 'POST',
                 headers: new Headers({
                   'Authorization': 'Bearer '+token,
