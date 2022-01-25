@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import getConfig from 'next/config';
+import jQuery from 'jquery';
 
 function ForgotPassword(){
     const {publicRuntimeConfig} = getConfig();
@@ -41,6 +42,7 @@ function ForgotPassword(){
             });
         }else{
             try {
+                jQuery("#loader-page").delay(100).fadeIn("slow");
                 const request = new Request(baseApiUrl + '/register/resetPassword', {
                 method: 'POST',
                 headers: new Headers({
@@ -49,20 +51,9 @@ function ForgotPassword(){
                     Accept: '*/*'
                 })
             });
-            try {
                 const response = await fetch(request);
                 if (response.status < 200 || response.status >= 300) {
                     const data = await response.json();
-                    toast.error(data.message+'!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        theme:"dark",
-                        draggable: true,
-                        progress: undefined,
-                    });
                     throw new Error(data.message);
                 }
                 toast.success('New password was sent to your Email! Check Spam also!', {
@@ -75,22 +66,12 @@ function ForgotPassword(){
                     draggable: true,
                     progress: undefined,
                 })
+                jQuery("#loader-page").delay(100).fadeOut("slow");
                 router.push('/login');
                 return Promise.resolve();
-            } catch (e) {
-                toast.error(e, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    theme:"dark",
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
         } catch (error) {
-            toast.error(error, {
+            jQuery("#loader-page").delay(100).fadeOut("slow");
+            toast.error(error+'!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

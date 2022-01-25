@@ -13,7 +13,7 @@ toast.configure();
 function MyApp({ Component, pageProps }) {
   useEffect(()=>{
     // Animate loader off screen
-    jQuery("#loader-page").delay(500).fadeOut("slow");
+    jQuery("#loader-page").delay(100).fadeOut("slow");
   }, []);
   return <>
   <Head>

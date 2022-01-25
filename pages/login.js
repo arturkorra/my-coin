@@ -9,6 +9,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify';
 import jwt_decode from "jwt-decode";
 import getConfig from 'next/config';
+import jQuery from 'jquery';
 
 
 
@@ -70,6 +71,7 @@ export default function LogIn(){
         });
     }else{
     try {
+      jQuery("#loader-page").delay(100).fadeIn("slow");
         const request = new Request(baseApiUrl + '/auth', {
             method: 'POST',
             body: JSON.stringify({ email: email, password: password }),
@@ -79,23 +81,10 @@ export default function LogIn(){
               Accept: '*/*'
             })
           });
-          try {
             const response = await fetch(request);
             if (response.status < 200 || response.status >= 300) {
               const data = await response.json();
-              toast.error(data.message+'!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme:"dark",
-                draggable: true,
-                progress: undefined,
-                });
-                // reset the captcha 
-              recaptchaRef.current.reset()
-              throw new Error(response.statusText);
+              throw new Error(data.message);
             }
             const sessionToken = await response.text();
             const decodedToken = await jwt_decode(sessionToken);
@@ -106,23 +95,11 @@ export default function LogIn(){
             window.localStorage.setItem('logs', permissionsArray);
             window.localStorage.setItem('sessionToken', sessionToken);
             router.push('/');
+            jQuery("#loader-page").delay(100).fadeOut("slow");
             return Promise.resolve();
-          } catch (e) {
-            toast.error(e, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme:"dark",
-              draggable: true,
-              progress: undefined,
-              });
-              // reset the captcha 
-              recaptchaRef.current.reset()
-          }
      } catch (error) {
-      toast.error(error, {
+      jQuery("#loader-page").delay(100).fadeOut("slow");
+      toast.error(error +"!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify';
 import getConfig from 'next/config';
+import jQuery from 'jquery';
 
 function Register(){
   const {publicRuntimeConfig} = getConfig();
@@ -19,6 +20,7 @@ function Register(){
   const [recaptchaToken, setRecaptchaToken] = useState();
   const recaptchaRef = React.useRef();
   const validEmail = String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+  const validPassword = String(password).toLowerCase().match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
 
   async function handleRegister(e) {
     e.preventDefault()
@@ -66,6 +68,17 @@ function Register(){
         draggable: true,
         progress: undefined,
         });
+      }else if(!validPassword){
+        toast.warn('Minimum eight characters, at least one letter, one number and one special character!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme:"dark",
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
     }else if(!recaptchaToken){
       toast.warn('Please fill the recaptcha!', {
         position: "top-right",
@@ -78,7 +91,7 @@ function Register(){
         progress: undefined,
         });
     }else{
-    try {
+      jQuery("#loader-page").delay(100).fadeIn("slow");
         const request = new Request(baseApiUrl + '/register', {
             method: 'POST',
             body: JSON.stringify({ username: username, email: email, password: password }),
@@ -92,24 +105,14 @@ function Register(){
             const response = await fetch(request);
             if (response.status < 200 || response.status >= 300) {
               const data = await response.json();
-              toast.error(data.message+'!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme:"dark",
-                draggable: true,
-                progress: undefined,
-                });
-                // reset the captcha 
-              recaptchaRef.current.reset();
               throw new Error(data.message);
             }
+            jQuery("#loader-page").delay(100).fadeOut("slow");
             router.push('/login');
             return Promise.resolve();
           } catch (e) {
-            toast.error(e, {
+            jQuery("#loader-page").delay(100).fadeOut("slow");
+            toast.error(e +'!', {
               position: "top-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -122,27 +125,11 @@ function Register(){
               // reset the captcha 
               recaptchaRef.current.reset()
           }
-     } catch (error) {
-      toast.error(error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme:"dark",
-        draggable: true,
-        progress: undefined,
-        });
-        // reset the captcha 
-        recaptchaRef.current.reset()
-        
-    }
-  }
+     } 
   };
-    
-      const verifyCallback = (recaptchaToken) => {
-        setRecaptchaToken(recaptchaToken);
-      };
+  const verifyCallback = (recaptchaToken) => {
+    setRecaptchaToken(recaptchaToken);
+  };
 
 return <>
 <Header></Header>

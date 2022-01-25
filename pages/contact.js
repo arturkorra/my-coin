@@ -75,7 +75,7 @@ function Contact(){
             });
         }else{
             try {
-                jQuery("#loader-page").delay(500).fadeIn("slow");
+                jQuery("#loader-page").delay(100).fadeIn("slow");
                 const request = new Request(baseApiUrl + '/contact', {
                 method: 'POST',
                 body: JSON.stringify({ username: username, email: email, subject: subject, message: message }),
@@ -84,23 +84,12 @@ function Contact(){
                     Accept: '*/*'
                 })
             });
-            try {
                 const response = await fetch(request);
                 if (response.status < 200 || response.status >= 500) {
                     const data = await response.json();
-                    toast.error(data.message+'!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        theme:"dark",
-                        draggable: true,
-                        progress: undefined,
-                    });
                     throw new Error(data.message);
                 }
-                jQuery("#loader-page").delay(500).fadeOut("slow");
+                jQuery("#loader-page").delay(100).fadeOut("slow");
                 toast.success('Thank you for contacting us!', {
                     position: "top-right",
                     autoClose: 5000,
@@ -116,22 +105,8 @@ function Contact(){
                 setSubject("");
                 setMessage("");
                 return Promise.resolve();
-            } catch (err) {
-                jQuery("#loader-page").delay(500).fadeOut("slow");
-                toast.error(err +'!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    theme:"dark",
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-            jQuery("#loader-page").delay(500).fadeOut("slow");
         } catch (error) {
-            jQuery("#loader-page").delay(500).fadeOut("slow");
+            jQuery("#loader-page").delay(100).fadeOut("slow");
             toast.error(error +'!', {
                 position: "top-right",
                 autoClose: 5000,
