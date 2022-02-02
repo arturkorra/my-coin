@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import getConfig from 'next/config';
 import jQuery from 'jquery';
+import Loader from "../components/loader";
+import Compress from 'compress.js';
 
 function Profile(){
     const {publicRuntimeConfig} = getConfig();
@@ -21,11 +23,50 @@ function Profile(){
     const [profileId ,setProfileId] = useState("");
     const validEmail = String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
     const validMobile = String(mobile).toLowerCase().match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
-
+    const [profileData, setProfileData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     
     useEffect(()=>{
-        getProfile();
-    }, [getProfile]);
+        async function getProfile(){
+            try {
+                const token = window.localStorage.getItem('sessionToken');
+                const request = new Request(baseApiUrl + '/profile', {
+                    method: 'GET',
+                    headers: new Headers({
+                        'Authorization': 'Bearer '+token,
+                        'Content-Type': 'application/json',
+                        Accept: '*/*'
+                    })
+                });
+                const response = await fetch(request);
+                const data = await response.json();
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(profileData.message);
+                }
+                setEmail(data.email);
+                setUsername(data.username);
+                setMobile(data.mobile);
+                setAddress(data.address);
+                setImage(data.image);
+                setProfileId(data.profileId);
+                setProfileData(data)
+                setIsLoading(false)
+            } catch (error) {
+                setIsLoading(false)
+                toast.error(error+"!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    theme:"dark",
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        getProfile()
+    }, []);
     Chart.register(ArcElement);
     //Chart.register(...registerables);
     
@@ -50,48 +91,6 @@ function Profile(){
         }]
     };
     
-    const getProfile = useCallback(async () => {
-        const profileData = {};
-        try {
-            jQuery("#loader-page").delay(100).fadeIn("slow");
-            const token = window.localStorage.getItem('sessionToken');
-            const request = new Request(baseApiUrl + '/profile', {
-                method: 'GET',
-                headers: new Headers({
-                    'Authorization': 'Bearer '+token,
-                    'Content-Type': 'application/json',
-                    Accept: '*/*'
-                })
-            });
-            const response = await fetch(request);
-            profileData = await response.json();
-            if (response.status < 200 || response.status >= 300) {
-                throw new Error(profileData.message);
-            }
-            
-            setEmail(profileData.email);
-            setUsername(profileData.username);
-            setMobile(profileData.mobile);
-            setAddress(profileData.address);
-            setImage(profileData.image);
-            setProfileId(profileData.profileId)
-            jQuery("#loader-page").delay(100).fadeOut("slow");
-            return Promise.resolve();
-        } catch (error) {
-            jQuery("#loader-page").delay(100).fadeOut("slow");
-            toast.error(error+"!", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme:"dark",
-                draggable: true,
-                progress: undefined,
-            });
-        }
-    }, [])
-    
     async function handleUpdate(e) {
         e.preventDefault()
         try {
@@ -108,7 +107,7 @@ function Profile(){
                     })
                 });
                 const response = await fetch(request);
-                profileData = await response.json();
+                const newData = await response.json();
                 if (response.status < 200 || response.status >= 300) {
                     const data = await response.json();
                     toast.error(data.message+'!', {
@@ -123,12 +122,13 @@ function Profile(){
                     });
                     throw new Error(data.message);
                 }
-            setEmail(profileData.email);
-            setUsername(profileData.username);
-            setMobile(profileData.mobile);
-            setAddress(profileData.address);
-            setImage(profileData.image);
-            setProfileId(profileData.profileId);
+            setEmail(newData.email);
+            setUsername(newData.username);
+            setMobile(newData.mobile);
+            setAddress(newData.address);
+            setImage(newData.image);
+            setProfileId(newData.profileId);
+            setProfileData(newData);
             jQuery("#loader-page").delay(100).fadeOut("slow");
             return Promise.resolve();
             } catch (error) {
@@ -149,12 +149,15 @@ function Profile(){
             var file =event.target.files[0];
             var reader = new FileReader();
             reader.onloadend = function() {
-              console.log('RESULT', reader.result)
+            console.log('RESULT', reader.result)
             setImage(reader.result);
             }
             reader.readAsDataURL(file);
           };
-          
+
+          if(isLoading){
+            return <Loader></Loader>
+        } 
         return<>
         <Header></Header>
         <main className="main-content">
@@ -162,7 +165,7 @@ function Profile(){
         <div className="profile-item">
         <div className="profile-thumbnail-item position-relative align-items-center py-4">
         <div className="thumbnail position-relative text-center">
-        <img id="avatar" src={image} onChange={(e) => setImage(e.target.value)} className="rounded-circle" alt="avatar"/>
+        <img id="avatar" src={image ? image  : "/logo.png"} onChange={(e) => setImage(e.target.value)} className="rounded-circle" alt="avatar"/>
         <div className="change-thumbnail">
         <form>
         <input accept="image/*" onChange={encodeImageFileAsURL} className="form-control-file" type="file"/>
@@ -231,7 +234,7 @@ function Profile(){
         </div>
         </div>
         </main>
-        <Footer></Footer>
+        <Footer active="profile"></Footer>
         </>
     }
     export default withAuth(Profile);

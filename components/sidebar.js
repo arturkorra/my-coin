@@ -6,16 +6,54 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import jwt_decode from "jwt-decode";
 import Image from 'next/image';
+import Loader from "../components/loader";
 import getConfig from 'next/config';
 
 function SideBar(){
+
+  const {publicRuntimeConfig} = getConfig();
+  const baseApiUrl = publicRuntimeConfig.baseApiUrl;
+  const [profileData, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(()=>{
+    async function getProfile(){
+      try {
+          const token = window.localStorage.getItem('sessionToken');
+          const request = new Request(baseApiUrl + '/profile', {
+              method: 'GET',
+              headers: new Headers({
+                  'Authorization': 'Bearer '+token,
+                  'Content-Type': 'application/json',
+                  Accept: '*/*'
+              })
+          });
+          const response = await fetch(request);
+          const data = await response.json();
+          if (response.status < 200 || response.status >= 300) {
+              throw new Error(profileData.message);
+          }
+          setProfileData(data)
+          setIsLoading(false)
+      } catch (error) {
+        setIsLoading(false)
+          toast.error(error+"!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme:"dark",
+              draggable: true,
+              progress: undefined,
+          });
+      }
+  }
+    getProfile();
     getUserNameToken();
 }, []);
   const [username, setUsername] = useState("");
   const router = useRouter();
-  const {publicRuntimeConfig} = getConfig();
-  const baseApiUrl = publicRuntimeConfig.baseApiUrl;
 
     //===== Main Sidebar =====//
     function showSideBar(e) {
@@ -79,7 +117,10 @@ function SideBar(){
             router.push('/login');    
         }
     }
-
+   
+    if(isLoading){
+        return <Loader></Loader>
+    } 
     return <>
     
     <div className="bg-overlay navbar-btn"></div>
@@ -105,7 +146,7 @@ function SideBar(){
     <div className="row align-items-center">
     <div className="col-auto">
     <div className="profile-img-item">
-    <img src="/users/user-1.jpg" className="rounded-circle" alt="profile"/>
+    <img src={profileData ? profileData.image  : "/logo.png"} className="rounded-circle" alt="profile"/>
     </div>
     </div>
     <div className="col ps-1">

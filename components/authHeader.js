@@ -1,15 +1,61 @@
 import Link from 'next/link';
 import jQuery from 'jquery';
 import Image from 'next/image'
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import Loader from "../components/loader";
+import React, { useEffect } from 'react';
+import getConfig from 'next/config';
 
 function AuthHeader(){
+    const {publicRuntimeConfig} = getConfig();
+    const baseApiUrl = publicRuntimeConfig.baseApiUrl;
+    const [profileData, setProfileData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     
+    useEffect(()=>{
+        async function getProfile(){
+            try {
+                const token = window.localStorage.getItem('sessionToken');
+                const request = new Request(baseApiUrl + '/profile', {
+                    method: 'GET',
+                    headers: new Headers({
+                        'Authorization': 'Bearer '+token,
+                        'Content-Type': 'application/json',
+                        Accept: '*/*'
+                    })
+                });
+                const response = await fetch(request);
+                const data = await response.json();
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(profileData.message);
+                }
+                setProfileData(data)
+                setIsLoading(false)
+            } catch (error) {
+                setIsLoading(false)
+                toast.error(error+"!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    theme:"dark",
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        getProfile()
+    }, []);
     function showSideBar(e) {
         e.preventDefault()
         jQuery('.main-sidebar').toggleClass("active");
         jQuery('.bg-overlay').toggleClass("active");
     }
-    
+    if(isLoading){
+        return <Loader></Loader>
+    } 
     return (<header className="header-main">
     <div className="container">
     <div className="content-header d-flex align-items-center justify-content-between">
@@ -42,7 +88,7 @@ function AuthHeader(){
     </div>
     <div className="avatar-item">
     <Link href={{ pathname: '/profile' }}>
-    <a><img alt='user' src="/users/user-1.jpg"/></a>
+    <a><img alt='user' src={profileData ? profileData.image  : "/logo.png"}/></a>
     </Link>
     </div>
     </div>

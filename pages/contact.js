@@ -212,7 +212,7 @@ onChange={(e) => setMessage(e.target.value)}></textarea>
 </div>
 </div>
 </main>
-<Footer></Footer>
+<Footer active="contact"></Footer>
 </>
 }
 export default Contact;
