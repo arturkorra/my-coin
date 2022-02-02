@@ -4,7 +4,6 @@ import { MiniChart } from "react-ts-tradingview-widgets";
 function MyMiniChart(props){
   return<MiniChart 
   colorTheme="dark"
-  largeChartUrl = ""
   symbol={props.symbol}
   width ="100%"
   height ="100%"
