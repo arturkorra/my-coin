@@ -3,6 +3,7 @@ import Footer from "../components/footer";
 import AuthHeader from "../components/authHeader";
 import SideBar from "../components/sidebar";
 import React, { useEffect } from 'react';
+import MyTechnicalAnalysis from "../components/widgetTechnicalAnalysis ";
 
 function Wallet(){
     return<>
@@ -59,6 +60,10 @@ function Wallet(){
             </div>
         </div>
     </div>
+    <center>
+    <MyTechnicalAnalysis symbol="BITSTAMP:BTCUSD">
+    </MyTechnicalAnalysis>
+    </center>
 </main>
     <Footer active="wallet"></Footer>
     </>

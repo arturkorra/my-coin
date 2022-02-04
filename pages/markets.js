@@ -5,8 +5,10 @@ import SideBar from "../components/sidebar";
 import React, { useEffect } from 'react';
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import useVH from 'react-viewport-height';
+import MySymbolOverview from "../components/widgetSymbolOverview";
+
 function Markets(){
-      const vh = useVH();
+    const vh = useVH();
     return<>
     <AuthHeader></AuthHeader>
     <SideBar></SideBar>
@@ -30,6 +32,11 @@ function Markets(){
     largeChartUrl = {window.location.href}
     >
     </AdvancedRealTimeChart>
+    <br></br>
+    <center>
+    <MySymbolOverview>
+    </MySymbolOverview>
+    </center>
     </main>
     <Footer active="markets"></Footer>
     </>
