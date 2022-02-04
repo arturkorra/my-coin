@@ -6,8 +6,17 @@ import React, { useEffect } from 'react';
 import MyTicker from "../components/myTricker";
 import MyMiniChart from "../components/widgetMiniChart";
 import MyCryptoCurrencyMarket from "../components/widgetCryptoCurrencyMarket";
+import jQuery from 'jquery';
 
 function HomePage(){
+   
+          //setTimeout(function() {
+            //const collection = document.getElementsByTagName("a");
+            //alert(collection.length);
+            //for(const elm of collection){
+                //alert(elm.getAttribute("href"));
+            //}
+          //}, 20000);
     return<>
     <AuthHeader></AuthHeader>
     <SideBar></SideBar>
