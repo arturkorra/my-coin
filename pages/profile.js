@@ -202,8 +202,8 @@ function Profile(){
         </Doughnut>
         </div>
         <div>
-        <h2>3.634528</h2>
-        <p className="mb-0 text-gray">$5500 USD</p>
+        <h2>0.0 BTC</h2>
+        <p className="mb-0 text-gray">$0USD</p>
         </div>
         </div>
         </div>
