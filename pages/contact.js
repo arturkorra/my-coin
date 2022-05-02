@@ -78,6 +78,7 @@ function Contact(){
                 jQuery("#loader-page").delay(100).fadeIn("slow");
                 const request = new Request(baseApiUrl + '/contact', {
                 method: 'POST',
+                referrerPolicy:"unsafe-url",
                 body: JSON.stringify({ username: username, email: email, subject: subject, message: message }),
                 headers: new Headers({
                     'Content-Type': 'application/json',

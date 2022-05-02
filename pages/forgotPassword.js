@@ -45,6 +45,7 @@ function ForgotPassword(){
                 jQuery("#loader-page").delay(100).fadeIn("slow");
                 const request = new Request(baseApiUrl + '/register/resetPassword', {
                 method: 'POST',
+                referrerPolicy:"unsafe-url",
                 headers: new Headers({
                     'Email': email,
                     'Content-Type': 'application/json',

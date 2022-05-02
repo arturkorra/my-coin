@@ -22,6 +22,7 @@ function SideBar(){
           const token = window.localStorage.getItem('sessionToken');
           const request = new Request(baseApiUrl + '/profile', {
               method: 'GET',
+              referrerPolicy:"unsafe-url",
               headers: new Headers({
                   'Authorization': 'Bearer '+token,
                   'Content-Type': 'application/json',

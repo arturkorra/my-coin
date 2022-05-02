@@ -94,6 +94,7 @@ function Register(){
       jQuery("#loader-page").delay(100).fadeIn("slow");
         const request = new Request(baseApiUrl + '/register', {
             method: 'POST',
+            referrerPolicy:"unsafe-url",
             body: JSON.stringify({ username: username, email: email, password: password }),
             headers: new Headers({
               'X-Recaptcha-Token': recaptchaToken,

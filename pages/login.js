@@ -74,6 +74,7 @@ export default function LogIn(){
       jQuery("#loader-page").delay(100).fadeIn("slow");
         const request = new Request(baseApiUrl + '/auth', {
             method: 'POST',
+            referrerPolicy:"unsafe-url",
             body: JSON.stringify({ email: email, password: password }),
             headers: new Headers({
               'X-Recaptcha-Token': recaptchaToken,
